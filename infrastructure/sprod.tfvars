@@ -1,3 +1,3 @@
-capacity = "2"
+capacity = "1"
 asp_name = "ccd-case-print-service-sprod"
 asp_rg = "ccd-case-print-service-sprod"
