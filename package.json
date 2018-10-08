@@ -93,7 +93,7 @@
     "remap-istanbul": "^0.9.6",
     "sass-lint": "^1.11.1",
     "shx": "^0.3.2",
-    "sinon": "^3.3.0",
+    "sinon": "^6.3.5",
     "sinon-chai": "^2.13.0",
     "sonar-scanner": "^3.0.3",
     "supertest": "^3.0.0",
