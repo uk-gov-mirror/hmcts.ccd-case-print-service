@@ -3,7 +3,8 @@
   "version": "1.2.0",
   "private": true,
   "engines": {
-    "node": "^8.9.4"
+    "node": "^8.9.4",
+    "yarn": "^1.9.4"
   },
   "scripts": {
     "start": "./node_modules/.bin/ts-node -r tsconfig-paths/register src/main/server.ts",
