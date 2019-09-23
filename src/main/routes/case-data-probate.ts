@@ -16,7 +16,7 @@ env.addFilter("date", dateFilter);
 env.addFilter("money", numeralFilter);
 
 router.get("/jurisdictions/:jid/case-types/:ctid/cases/:cid/probate/:tid", (req, res) => {
-  getCase(req, req.params.jid, req.params.ctid, req.params.cid)
+  getCase(req, req.params.cid)
     .then((caseData) => {
         getProbateCaseDetailsTemplate(req, req.params.jid, req.params.ctid, req.params.cid, req.params.tid)
         .then((template) => {

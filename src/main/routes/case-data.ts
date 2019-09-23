@@ -3,8 +3,8 @@ import { getCase } from "../service/case-service";
 
 const router = express.Router();
 
-router.get("/jurisdictions/:jid/case-types/:ctid/cases/:cid", (req, res) => {
-  getCase(req, req.params.jid, req.params.ctid, req.params.cid)
+router.get("/cases/:cid", (req, res) => {
+  getCase(req, req.params.cid)
     .then((caseData) => {
       res.render("case-data", {
         caseData,
