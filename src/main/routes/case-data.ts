@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/cases/:cid", (req, res) => {
   getCase(req, req.params.cid)
     .then((caseData) => {
+      delete caseData._links;
       res.render("case-data", {
         caseData,
         generatedDateTime: generateDateTime(),

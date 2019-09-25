@@ -7,9 +7,12 @@ export function getCase(req, cid) {
   const authorization = req.get(userReqAuth.AUTHORIZATION);
   return fetch(url, {
                       headers: {
+                        "Accept":
+                          "application/vnd.uk.gov.hmcts.ccd-data-store-api.case.v2+json;charset=UTF-8",
                         "Authorization": authorization,
                         "Content-Type": "application/json",
                         "ServiceAuthorization": req.headers.ServiceAuthorization,
+                        "experimental": "true",
                       },
                       method: "GET",
                     })
