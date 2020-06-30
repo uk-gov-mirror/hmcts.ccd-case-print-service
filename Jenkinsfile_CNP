@@ -10,8 +10,14 @@ def product = "ccd"
 def component = "case-print-service"
 
 def secrets = [
+    'ccd-${env}': [
+        secret('ccd-caseworker-autotest-password', 'CCD_CASEWORKER_AUTOTEST_PASSWORD'),
+        secret('ccd-importer-autotest-password', 'CCD_IMPORT_AUTOTEST_PASSWORD'),
+        secret('ccd-api-gateway-oauth2-client-secret', 'OAUTH2_CLIENT_SECRET'),
+    ],
     's2s-${env}': [
         secret('microservicekey-ccd-ps', 'IDAM_SERVICE_KEY'),
+        secret('microservicekey-ccd-gw', 'BEFTA_S2S_CLIENT_SECRET')
     ]
 ]
 
@@ -29,9 +35,22 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+// vars needed for functional tests
+env.IDAM_URL = "https://idam-api.aat.platform.hmcts.net"
+env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+env.BEFTA_S2S_CLIENT_ID = "ccd_gw"
+env.OAUTH2_CLIENT_ID = "ccd_gateway"
+env.OAUTH2_REDIRECT_URI = "https://www-ccd.aat.platform.hmcts.net/oauth2redirect"
+env.DEFINITION_STORE_HOST = "http://ccd-definition-store-api-aat.service.core-compute-aat.internal"
+env.CCD_CASEWORKER_AUTOTEST_EMAIL = "auto.test.cnp@gmail.com"
+env.CCD_IMPORT_AUTOTEST_EMAIL = "ccd.docker.default@hmcts.net"
+
 withPipeline("nodejs", product, component) {
     onMaster {
         enableSlackNotifications('#ccd-master-builds')
+    }
+    if (env.BRANCH_NAME == 'develop') {
+        enableSlackNotifications('#ccd-develop-builds')
     }
     onDemo {
         enableSlackNotifications('#ccd-demo-builds')
@@ -43,11 +62,23 @@ withPipeline("nodejs", product, component) {
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
-    enableDockerBuild()
     installCharts()
+    enableAksStagingDeployment()
+    disableLegacyDeployment()
 
     afterCheckout {
         sh "yarn cache clean"
     }
 
+    after('build') {
+        sh "yarn check"
+    }
+
+    after('functionalTest:preview') {
+      steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/target/cucumber/**/*'
+    }
+
+    after('functionalTest:aat') {
+      steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/target/cucumber/**/*'
+    }
 }

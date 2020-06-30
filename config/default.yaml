@@ -7,13 +7,16 @@ security:
       - TODO
       - Set-proper-SHA256s
 idam:
-  base_url: http://localhost:4501
+  base_url: http://localhost:5000
   s2s_url: http://localhost:4502
   print_service_key: AAAAAAAAAAAAAAAA
   service_name: ccd_ps
 case_data_store_url: http://localhost:4452
 case_data_probate_template_url: http://localhost:4104
 appInsights:
-  instrumentationKey: "some-key"
   enabled: true
   roleName: "ccd-case-print-service"
+secrets:
+  ccd:
+    microservicekey-ccd-ps: AAAAAAAAAAAAAAAA
+    AppInsightsInstrumentationKey: "some-key"
